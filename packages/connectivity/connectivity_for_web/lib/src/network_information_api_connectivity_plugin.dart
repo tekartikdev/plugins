@@ -13,7 +13,16 @@ class NetworkInformationApiConnectivityPlugin extends ConnectivityPlugin {
   final dom.NetworkInformation _networkInformation;
 
   /// A check to determine if this version of the plugin can be used.
-  static bool isSupported() => dom.navigator?.connection != null;
+  static bool isSupported() {
+    try {
+      return dom.navigator?.connection != null;
+    } catch (_) {
+      // Temp solution for https://github.com/flutter/flutter/issues/60855
+      // Somehow when published this throws an exception:
+      // NoSuchMethodError: method not found: 'ga5S' (J.a6(...).ga5S is not a function)
+    }
+    return false;
+  }
 
   /// The constructor of the plugin.
   NetworkInformationApiConnectivityPlugin()
